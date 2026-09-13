@@ -42,9 +42,10 @@
     .header h1 {
       margin: 0;
       font-size: 28px;
+      text-align: left;
     }
 
-    /* モードボタン */
+    /* 切り替えボタン */
     .mode-buttons {
       display: flex;
       gap: 10px;
@@ -66,7 +67,7 @@
       color: #ffffff;
     }
 
-    /* 入力 */
+    /* 入力エリア */
     .tool-panel {
       width: 100%;
     }
@@ -108,7 +109,7 @@
       word-break: break-all;
     }
 
-    /* コピー・クリア */
+    /* 下ボタン */
     .button-row {
       display: flex;
       gap: 10px;
@@ -147,43 +148,50 @@
 
     <!-- ヘッダー -->
     <div class="header">
+
       <img src="トータルロゴ.png" alt="Logo">
+
       <h1>URL変換ツール</h1>
+
     </div>
 
 
-    <!-- モード -->
+    <!-- モード切り替え -->
     <div class="mode-buttons">
 
       <button
         id="driveButton"
         class="active"
-        onclick="switchMode('drive')">
+        onclick="switchMode('drive')"
+      >
         Google Drive
       </button>
 
       <button
         id="slideButton"
-        onclick="switchMode('slide')">
+        onclick="switchMode('slide')"
+      >
         Google スライド
       </button>
 
       <button
         id="dropboxButton"
-        onclick="switchMode('dropbox')">
+        onclick="switchMode('dropbox')"
+      >
         Dropbox
       </button>
 
       <button
         id="appendButton"
-        onclick="switchMode('append')">
+        onclick="switchMode('append')"
+      >
         URL末尾追加
       </button>
 
     </div>
 
 
-    <!-- 入力 -->
+    <!-- 入力エリア -->
     <div class="tool-panel">
 
       <p>共有URLを入力してください：</p>
@@ -204,7 +212,8 @@
 
       <button
         class="convert-button"
-        onclick="convertCurrentMode()">
+        onclick="convertCurrentMode()"
+      >
         変換する
       </button>
 
@@ -215,7 +224,7 @@
     <div id="output"></div>
 
 
-    <!-- ボタン -->
+    <!-- コピー・クリア -->
     <div class="button-row">
 
       <button onclick="copyUrl()">
@@ -233,16 +242,16 @@
 
   <script>
 
-    /* =========================================
+    /* ========================================
        現在のモード
-       ========================================= */
+       ======================================== */
 
     let currentMode = "drive";
 
 
-    /* =========================================
+    /* ========================================
        モード切り替え
-       ========================================= */
+       ======================================== */
 
     function switchMode(mode) {
 
@@ -274,9 +283,9 @@
     }
 
 
-    /* =========================================
-       現在選択されているボタンの機能を実行
-       ========================================= */
+    /* ========================================
+       現在のモードで変換
+       ======================================== */
 
     function convertCurrentMode() {
 
@@ -284,29 +293,41 @@
 
         convertDrive();
 
-      } else if (currentMode === "slide") {
+        return;
+      }
+
+      if (currentMode === "slide") {
 
         convertSlide();
 
-      } else if (currentMode === "dropbox") {
+        return;
+      }
+
+      if (currentMode === "dropbox") {
 
         convertDropbox();
 
-      } else if (currentMode === "append") {
+        return;
+      }
+
+      if (currentMode === "append") {
 
         convertAppend();
 
+        return;
       }
     }
 
 
-    /* =========================================
+    /* ========================================
        Google Drive
        
-       Drive URL
-       ↓
-       ダウンロードURL
-       ========================================= */
+       入力：
+       https://drive.google.com/file/d/ID/view
+       
+       出力：
+       https://drive.google.com/uc?export=download&id=ID
+       ======================================== */
 
     function convertDrive() {
 
@@ -357,17 +378,19 @@
     }
 
 
-    /* =========================================
+    /* ========================================
        Google スライド
        
-       編集URL
-       ↓
-       拡大表示URL
+       入力：
+       https://docs.google.com/presentation/d/ID/edit
        
-       /edit?slide=id.xxx
-       ↓
-       /present?slide=id.xxx
-       ========================================= */
+       または
+       
+       https://docs.google.com/presentation/d/ID/edit?slide=id.xxx
+       
+       出力：
+       https://docs.google.com/presentation/d/ID/export/pdf
+       ======================================== */
 
     function convertSlide() {
 
@@ -392,7 +415,7 @@
 
       const match =
         input.match(
-          /presentation\/d\/([a-zA-Z0-9_-]+)/
+          /docs\.google\.com\/presentation\/d\/([a-zA-Z0-9_-]+)/
         );
 
 
@@ -410,27 +433,15 @@
 
 
       /*
-       * slide= の値を取得
-       */
-
-      const slideMatch =
-        input.match(
-          /[?&]slide=([^&#]+)/
-        );
-
-
-      const slide =
-        slideMatch
-          ? slideMatch[1]
-          : "id.p";
-
-
-      /*
-       * 拡大表示URL
+       * 編集URLの /edit や
+       * ?slide=id.xxx は使わない。
+       *
+       * プレゼンテーションIDだけを使って
+       * PDFダウンロードURLを作る。
        */
 
       const result =
-        `https://docs.google.com/presentation/d/${presentationId}/present?slide=${slide}`;
+        `https://docs.google.com/presentation/d/${presentationId}/export/pdf`;
 
 
       output.innerText =
@@ -438,20 +449,22 @@
     }
 
 
-    /* =========================================
+    /* ========================================
        Dropbox
-       ========================================= */
+       ======================================== */
 
     function convertDropbox() {
 
-      document.getElementById("output").innerText =
+      document
+        .getElementById("output")
+        .innerText =
         "Dropbox機能はまだ実装されていません。";
     }
 
 
-    /* =========================================
+    /* ========================================
        URL末尾追加
-       ========================================= */
+       ======================================== */
 
     function convertAppend() {
 
@@ -469,7 +482,9 @@
 
       if (!input) {
 
-        document.getElementById("output").innerText =
+        document
+          .getElementById("output")
+          .innerText =
           "URLを入力してください。";
 
         return;
@@ -478,21 +493,25 @@
 
       if (!addition) {
 
-        document.getElementById("output").innerText =
+        document
+          .getElementById("output")
+          .innerText =
           "追加する文字列を入力してください。";
 
         return;
       }
 
 
-      document.getElementById("output").innerText =
+      document
+        .getElementById("output")
+        .innerText =
         input + addition;
     }
 
 
-    /* =========================================
+    /* ========================================
        コピー
-       ========================================= */
+       ======================================== */
 
     function copyUrl() {
 
@@ -526,9 +545,9 @@
     }
 
 
-    /* =========================================
+    /* ========================================
        クリア
-       ========================================= */
+       ======================================== */
 
     function clearAll() {
 

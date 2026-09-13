@@ -283,37 +283,21 @@
 
         function switchMode(mode) {
 
-          const panels = [
-            "drivePanel",
-            "slidePanel",
-            "dropboxPanel",
-            "appendPanel"
-          ];
+          document.getElementById("drivePanel").classList.add("hidden");
+          document.getElementById("slidePanel").classList.add("hidden");
+          document.getElementById("dropboxPanel").classList.add("hidden");
+          document.getElementById("appendPanel").classList.add("hidden");
 
-          const buttons = [
-            "driveButton",
-            "slideButton",
-            "dropboxButton",
-            "appendButton"
-          ];
+          document.getElementById("driveButton").classList.remove("active");
+          document.getElementById("slideButton").classList.remove("active");
+          document.getElementById("dropboxButton").classList.remove("active");
+          document.getElementById("appendButton").classList.remove("active");
 
-          panels.forEach(function(panel) {
-            document.getElementById(panel).classList.add("hidden");
-          });
-
-          buttons.forEach(function(button) {
-            document.getElementById(button).classList.remove("active");
-          });
-
-          document.getElementById(mode + "Panel")
-            .classList.remove("hidden");
-
-          document.getElementById(mode + "Button")
-            .classList.add("active");
+          document.getElementById(mode + "Panel").classList.remove("hidden");
+          document.getElementById(mode + "Button").classList.add("active");
 
           document.getElementById("output").innerText = "";
         }
-
 
         /* =========================
            Google Drive

@@ -303,7 +303,7 @@
            if (input.includes("https://docs.google.com/presentation/d/")) {
 
              const downloadUrl =
-               input.replace("/edit", "/export/pdf");
+               input.replace(/\/edit.*$/, "/export/pdf");
 
              document.getElementById("output").innerText =
                downloadUrl;

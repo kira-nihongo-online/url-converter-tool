@@ -425,7 +425,6 @@ function convertSlide() {
       .value
       .trim();
 
-
   const output =
     document.getElementById("output");
 
@@ -439,10 +438,6 @@ function convertSlide() {
   }
 
 
-  /*
-   * GoogleスライドのID
-   */
-
   const match =
     input.match(
       /presentation\/d\/([a-zA-Z0-9_-]+)/
@@ -452,7 +447,7 @@ function convertSlide() {
   if (!match) {
 
     output.innerText =
-      "❌ 正しいGoogleスライドURLではありません。";
+      "正しいGoogleスライドURLではありません。";
 
     return;
   }
@@ -462,33 +457,11 @@ function convertSlide() {
     match[1];
 
 
-  /*
-   * slide= の値
-   */
-
-  const slideMatch =
-    input.match(
-      /[?&]slide=([^&#]+)/
-    );
-
-
-  const slide =
-    slideMatch
-      ? slideMatch[1]
-      : "id.p";
-
-
-  /*
-   * 拡大表示URL
-   */
-
   output.innerText =
     "https://docs.google.com/presentation/d/" +
     presentationId +
-    "/present?slide=" +
-    slide;
+    "/export/pdf";
 }
-
 
 /* =========================================
    Dropbox

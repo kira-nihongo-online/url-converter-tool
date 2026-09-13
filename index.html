@@ -436,42 +436,28 @@ function convertDrive() {
 function convertSlide() {
 
   const input =
-    document
-      .getElementById("mainInput")
-      .value
-      .trim();
+    document.getElementById("mainInput").value.trim();
 
   const output =
     document.getElementById("output");
 
-
   if (!input) {
-
-    output.innerText =
-      "URLを入力してください。";
-
+    output.innerText = "URLを入力してください。";
     return;
   }
-
 
   const match =
     input.match(
-      /presentation\/d\/([a-zA-Z0-9_-]+)/
+      /https:\/\/docs\.google\.com\/presentation\/d\/([a-zA-Z0-9_-]+)\/edit/
     );
 
-
   if (!match) {
-
     output.innerText =
       "正しいGoogleスライドURLではありません。";
-
     return;
   }
 
-
-  const presentationId =
-    match[1];
-
+  const presentationId = match[1];
 
   output.innerText =
     "https://docs.google.com/presentation/d/" +

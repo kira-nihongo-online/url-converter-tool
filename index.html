@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>URL変換ツール</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: sans-serif;
+      background: #ffffff;
+      color: #222222;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* ロゴ */
+    .logo {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .logo img {
+      width: 150px;
+      max-width: 60%;
+      height: auto;
+    }
+
+    /* タイトル */
+    h1 {
+      text-align: center;
+      font-size: 28px;
+      margin: 10px 0 25px;
+    }
+
+    /* 切り替えボタン */
+    .mode-buttons {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .mode-buttons button {
+      flex: 1;
+      padding: 14px 10px;
+      border: 1px solid #cccccc;
+      border-radius: 8px;
+      background: #f5f5f5;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .mode-buttons button.active {
+      background: #333333;
+      color: #ffffff;
+    }
+
+    /* 入力エリア */
+    .tool-panel {
+      width: 100%;
+    }
+
+    .tool-panel p {
+      margin: 0 0 8px;
+      font-size: 15px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #cccccc;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+
+    /* 変換ボタン */
+    .convert-button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      background: #333333;
+      color: #ffffff;
+      cursor: pointer;
+    }
+
+    /* 結果 */
+    #output {
+      width: 100%;
+      min-height: 50px;
+      margin-top: 20px;
+      padding: 12px;
+      background: #f0f0f0;
+      border-radius: 6px;
+      word-break: break-all;
+    }
+
+    /* 下ボタン */
+    .button-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .button-row button {
+      flex: 1;
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #cccccc;
+      border-radius: 6px;
+      background: #ffffff;
+      cursor: pointer;
+    }
+
+    /* まだ使わないパネル */
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 600px) {
+
+      body {
+        padding: 15px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      .mode-buttons button {
+        font-size: 14px;
+      }
+
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- ロゴ -->
+    <div class="logo">
+      <img src="トータルロゴ.png" alt="Logo">
+    </div>
+
+    <!-- タイトル -->
+    <h1>URL変換ツール</h1>
+
+    <!-- 切り替え -->
+    <div class="mode-buttons">
+
+      <button class="active">
+        Google Drive
+      </button>
+
+      <button>
+        Google スライド
+      </button>
+
+    </div>
+
+    <!-- Google Drive -->
+    <div id="drivePanel" class="tool-panel">
+
+      <p>共有URLを入力してください：</p>
+
+      <input
+        type="text"
+        id="driveInput"
+        placeholder="Google Driveの共有URL"
+      >
+
+      <button class="convert-button">
+        変換する
+      </button>
+
+    </div>
+
+    <!-- Google スライド -->
+    <div id="slidePanel" class="tool-panel hidden">
+
+      <p>編集URLを入力してください：</p>
+
+      <input
+        type="text"
+        id="slideInput"
+        placeholder="Google スライドの編集URL"
+      >
+
+      <button class="convert-button">
+        変換する
+      </button>
+
+    </div>
+
+    <!-- 結果 -->
+    <div id="output"></div>
+
+    <!-- ボタン -->
+    <div class="button-row">
+
+      <button>
+        コピー
+      </button>
+
+      <button>
+        クリア
+      </button>
+
+    </div>
+
+  </div>
+
+</body>
+</html>

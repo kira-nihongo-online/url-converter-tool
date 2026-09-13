@@ -60,6 +60,7 @@
     }
 
     .mode-buttons button.active {
+      background: #333333;
       color: #ffffff;
     }
 
@@ -261,7 +262,7 @@ let currentMode = "download";
 function updateButtons(activeId) {
 
   document
-    .getElementById("driveButton")
+    .getElementById("downloadButton")
     .classList.remove("active");
 
   document
@@ -280,7 +281,6 @@ function updateButtons(activeId) {
     .getElementById(activeId)
     .classList.add("active");
 }
-
 
 /* =========================================
    Google Driveを選択

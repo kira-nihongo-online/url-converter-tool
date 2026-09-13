@@ -267,25 +267,19 @@
            const match =
              input.match(/presentation\/d\/([a-zA-Z0-9_-]+)/);
 
-           const slideMatch =
-             input.match(/slide=([^&#]+)/);
-
-           if (match) {
+           if (match && match[1]) {
 
              const id = match[1];
 
-             const slide =
-               slideMatch ? slideMatch[1] : "id.p";
-
              const result =
-               `https://docs.google.com/presentation/d/${id}/present?slide=${slide}`;
+               `https://docs.google.com/presentation/d/${id}/export/pdf`;
 
-             document.getElementById("output").textContent =
+             document.getElementById("output").innerText =
                result;
 
            } else {
 
-             document.getElementById("output").textContent =
+             document.getElementById("output").innerText =
                "❌ 正しいGoogleスライドURLではありません。";
            }
          }

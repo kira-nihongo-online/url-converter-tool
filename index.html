@@ -315,6 +315,20 @@
            }
          }
 
+         function convertCurrentMode() {
+
+           if (currentMode === "drive") {
+
+             convertDrive();
+
+           } else if (currentMode === "slide") {
+
+             convertSlide();
+
+           }
+
+         }
+
          function switchMode(mode) {
 
            currentMode = mode;

@@ -300,10 +300,17 @@
              return;
            }
 
-           if (input.includes("https://docs.google.com/presentation/d/")) {
+           const match =
+             input.match(
+               /^https:\/\/docs\.google\.com\/presentation\/d\/([^/]+)\/edit/
+             );
+
+           if (match && match[1]) {
+
+             const presentationId = match[1];
 
              const downloadUrl =
-               input.replace(/\/edit.*$/, "/export/pdf");
+               `https://docs.google.com/presentation/d/${presentationId}/export/pdf`;
 
              document.getElementById("output").innerText =
                downloadUrl;

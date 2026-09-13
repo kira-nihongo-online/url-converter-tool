@@ -25,23 +25,24 @@
       margin: 0 auto;
     }
 
-    /* ロゴ */
-    .logo {
-      text-align: center;
-      margin-bottom: 10px;
+    /* ヘッダー */
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 25px;
     }
 
-    .logo img {
-      width: 150px;
-      max-width: 60%;
-      height: auto;
+    .header img {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
     }
 
-    /* タイトル */
-    h1 {
-      text-align: center;
+    .header h1 {
+      margin: 0;
       font-size: 28px;
-      margin: 10px 0 25px;
+      text-align: left;
     }
 
     /* 切り替えボタン */
@@ -152,13 +153,14 @@
 
   <div class="container">
 
-    <!-- ロゴ -->
-    <div class="logo">
-      <img src="トータルロゴ.png" alt="Logo">
-    </div>
+    <!-- ヘッダー -->
+    <div class="header">
 
-    <!-- タイトル -->
-    <h1>URL変換ツール</h1>
+      <img src="トータルロゴ.png" alt="Logo">
+
+      <h1>URL変換ツール</h1>
+
+    </div>
 
     <!-- 切り替え -->
     <div class="mode-buttons">

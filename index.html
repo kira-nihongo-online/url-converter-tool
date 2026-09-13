@@ -218,7 +218,7 @@
       <button
         class="convert-button"
         id="convertButton"
-        onclick="convertDrive()"
+        onclick="convertCurrentMode()"
       >
         変換する
       </button>
@@ -281,6 +281,37 @@
 
              document.getElementById("output").innerText =
                "正しいURL形式ではありません。";
+           }
+         }
+
+         function convertSlide() {
+
+           const input =
+             document.getElementById("mainInput").value.trim();
+
+           const addition =
+             document.getElementById("appendText").value;
+
+           if (addition.trim() !== "") {
+
+             document.getElementById("output").innerText =
+               "Google スライドでは「追加する文字列」は使用できません。入力しないでください。";
+
+             return;
+           }
+
+           if (input.includes("https://docs.google.com/presentation/d/")) {
+
+             const downloadUrl =
+               input.replace("/edit", "/export/pdf");
+
+             document.getElementById("output").innerText =
+               downloadUrl;
+
+           } else {
+
+             document.getElementById("output").innerText =
+               "正しいGoogleスライドURLではありません。";
            }
          }
 

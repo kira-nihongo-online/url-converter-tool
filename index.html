@@ -199,30 +199,25 @@
     <!-- 入力エリア -->
     <div class="tool-panel">
 
-      <p id="inputLabel">共有URLを入力してください：</p>
+      <p>共有URLを入力してください：</p>
 
       <input
         type="text"
-        id="driveInput"
-        placeholder="Google Driveの共有URL"
+        id="mainInput"
+        placeholder="URLを入力してください"
       >
 
-      <div id="appendArea" class="hidden">
+      <p>追加する文字列：</p>
 
-        <p>追加する文字列：</p>
-
-        <input
-          type="text"
-          id="appendText"
-          placeholder="?download=1"
-        >
-
-      </div>
+      <input
+        type="text"
+        id="appendText"
+        placeholder="追加する文字列を入力してください"
+      >
 
       <button
         class="convert-button"
         id="convertButton"
-        onclick="convertDrive()"
       >
         変換する
       </button>

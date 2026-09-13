@@ -165,10 +165,10 @@
 
     <button
       type="button"
-      id="driveButton"
+      id="downloadButton"
       class="active"
-      onclick="selectDrive()">
-      Google Drive
+      onclick="selectDownload()">
+      ダウンロードURL変換
     </button>
 
     <button
@@ -251,7 +251,7 @@
    現在のモード
    ========================================= */
 
-let currentMode = "drive";
+let currentMode = "download";
 
 
 /* =========================================
@@ -286,11 +286,11 @@ function updateButtons(activeId) {
    Google Driveを選択
    ========================================= */
 
-function selectDrive() {
+function selectDownload() {
 
-  currentMode = "drive";
+  currentMode = "download";
 
-  updateButtons("driveButton");
+  updateButtons("downloadButton");
 
   document.getElementById("output").innerText = "";
 }
@@ -344,7 +344,7 @@ function selectAppend() {
 
 function convert() {
 
-  if (currentMode === "drive") {
+  if (currentMode === "download") {
 
     convertDrive();
 
@@ -382,7 +382,7 @@ function convert() {
    Google Drive
    ========================================= */
 
-function convertDrive() {
+function convertDownload() {
 
   const input =
     document
@@ -390,10 +390,8 @@ function convertDrive() {
       .value
       .trim();
 
-
   const output =
     document.getElementById("output");
-
 
   if (!input) {
 
@@ -403,31 +401,27 @@ function convertDrive() {
     return;
   }
 
-
   const match =
     input.match(
-      /drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/
+      /presentation\/d\/([a-zA-Z0-9_-]+)/
     );
-
 
   if (!match) {
 
     output.innerText =
-      "正しいGoogle Drive URLではありません。";
+      "正しいGoogleスライドURLではありません。";
 
     return;
   }
 
-
-  const fileId =
+  const presentationId =
     match[1];
 
-
   output.innerText =
-    "https://drive.google.com/uc?export=download&id=" +
-    fileId;
+    "https://docs.google.com/presentation/d/" +
+    presentationId +
+    "/export/pdf";
 }
-
 
 /* =========================================
    Google スライド

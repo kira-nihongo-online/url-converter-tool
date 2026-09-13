@@ -45,7 +45,7 @@
       text-align: left;
     }
 
-    /* モードボタン */
+    /* 切り替えボタン */
     .mode-buttons {
       display: flex;
       gap: 10px;
@@ -126,7 +126,6 @@
       cursor: pointer;
     }
 
-    /* スマートフォン */
     @media (max-width: 600px) {
 
       body {
@@ -159,7 +158,7 @@
     </div>
 
 
-    <!-- モード切り替え -->
+    <!-- 切り替えボタン -->
     <div class="mode-buttons">
 
       <button
@@ -264,6 +263,7 @@
       const addition =
         document.getElementById("appendText").value.trim();
 
+
       if (addition !== "") {
 
         document.getElementById("output").innerText =
@@ -274,17 +274,18 @@
 
 
       /*
-       * Google Drive
+       * Google DriveのURLだけを対象にする
+       *
+       * 入力：
        * https://drive.google.com/file/d/FILE_ID/view
        *
-       * ↓
-       *
+       * 出力：
        * https://drive.google.com/uc?export=download&id=FILE_ID
        */
 
       const match =
         input.match(
-          /https:\/\/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/
+          /^https:\/\/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/
         );
 
 
@@ -332,18 +333,22 @@
 
 
       /*
-       * Google スライド
-       * https://docs.google.com/presentation/d/FILE_ID/edit
-       *
-       * ↓
-       *
-       * https://docs.google.com/presentation/d/FILE_ID/export/pdf
+       * Google スライドのURLから
+       * プレゼンテーションIDを取得
        */
 
       const match =
         input.match(
-          /https:\/\/docs\.google\.com\/presentation\/d\/([a-zA-Z0-9_-]+)/
+          /^https:\/\/docs\.google\.com\/presentation\/d\/([a-zA-Z0-9_-]+)/
         );
+
+
+      /*
+       * URL内の slide=id.xxxxx を取得
+       */
+
+      const slideMatch =
+        input.match(/(?:[?&])slide=([^&#]+)/);
 
 
       if (!match) {
@@ -358,8 +363,21 @@
       const presentationId = match[1];
 
 
+      /*
+       * slide指定がある場合はそのIDを使用
+       * なければ id.p
+       */
+
+      const slide =
+        slideMatch ? slideMatch[1] : "id.p";
+
+
+      /*
+       * Google スライドの拡大表示URL
+       */
+
       const result =
-        `https://docs.google.com/presentation/d/${presentationId}/export/pdf`;
+        `https://docs.google.com/presentation/d/${presentationId}/present?slide=${slide}`;
 
 
       document.getElementById("output").innerText =
@@ -374,7 +392,7 @@
     function convertDropbox() {
 
       document.getElementById("output").innerText =
-        "Dropbox機能はまだ設定されていません。";
+        "Dropbox機能はまだ実装されていません。";
     }
 
 
@@ -384,37 +402,8 @@
 
     function convertAppend() {
 
-      const input =
-        document.getElementById("mainInput").value.trim();
-
-      const addition =
-        document.getElementById("appendText").value;
-
-
-      if (!input) {
-
-        document.getElementById("output").innerText =
-          "URLを入力してください。";
-
-        return;
-      }
-
-
-      if (!addition) {
-
-        document.getElementById("output").innerText =
-          "追加する文字列を入力してください。";
-
-        return;
-      }
-
-
-      const result =
-        input + addition;
-
-
       document.getElementById("output").innerText =
-        result;
+        "URL末尾追加機能はまだ実装されていません。";
     }
 
 
@@ -428,21 +417,15 @@
 
         convertDrive();
 
-      }
-
-      else if (currentMode === "slide") {
+      } else if (currentMode === "slide") {
 
         convertSlide();
 
-      }
-
-      else if (currentMode === "dropbox") {
+      } else if (currentMode === "dropbox") {
 
         convertDropbox();
 
-      }
-
-      else if (currentMode === "append") {
+      } else if (currentMode === "append") {
 
         convertAppend();
 
@@ -483,8 +466,8 @@
 
 
       /*
-       * モードを変えたら結果だけ消す。
-       * 入力内容は残す。
+       * モードを切り替えたら
+       * 前の変換結果だけ消す
        */
 
       document.getElementById("output").innerText = "";

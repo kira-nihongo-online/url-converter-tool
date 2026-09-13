@@ -218,6 +218,7 @@
       <button
         class="convert-button"
         id="convertButton"
+        onclick="convertDrive()"
       >
         変換する
       </button>
@@ -246,6 +247,42 @@
        <script>
 
          let currentMode = "drive";
+
+         function convertDrive() {
+
+           const input =
+             document.getElementById("mainInput").value.trim();
+
+           const addition =
+             document.getElementById("appendText").value;
+
+           if (addition.trim() !== "") {
+
+             document.getElementById("output").innerText =
+               "Google Driveでは「追加する文字列」は使用できません。入力しないでください。";
+
+             return;
+           }
+
+           const match =
+             input.match(/\/d\/([a-zA-Z0-9_-]+)\//);
+
+           if (match && match[1]) {
+
+             const fileId = match[1];
+
+             const downloadUrl =
+               `https://drive.google.com/uc?export=download&id=${fileId}`;
+
+             document.getElementById("output").innerText =
+               downloadUrl;
+
+           } else {
+
+             document.getElementById("output").innerText =
+               "正しいURL形式ではありません。";
+           }
+         }
 
          function switchMode(mode) {
 
@@ -276,7 +313,7 @@
 
          function clearAll() {
 
-           document.getElementById("driveInput").value = "";
+           document.getElementById("mainInput").value = "";
            document.getElementById("appendText").value = "";
            document.getElementById("output").innerText = "";
 

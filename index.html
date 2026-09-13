@@ -25,6 +25,7 @@
       margin: 0 auto;
     }
 
+    /* ヘッダー */
     .header {
       display: flex;
       align-items: center;
@@ -43,6 +44,7 @@
       font-size: 28px;
     }
 
+    /* モードボタン */
     .mode-buttons {
       display: flex;
       gap: 10px;
@@ -64,6 +66,7 @@
       color: #ffffff;
     }
 
+    /* 入力エリア */
     .tool-panel {
       width: 100%;
     }
@@ -82,6 +85,7 @@
       margin-bottom: 10px;
     }
 
+    /* 変換ボタン */
     .convert-button {
       width: 100%;
       padding: 12px;
@@ -93,6 +97,7 @@
       cursor: pointer;
     }
 
+    /* 結果 */
     #output {
       width: 100%;
       min-height: 50px;
@@ -103,6 +108,7 @@
       word-break: break-all;
     }
 
+    /* 下ボタン */
     .button-row {
       display: flex;
       gap: 10px;
@@ -120,6 +126,7 @@
     }
 
     @media (max-width: 600px) {
+
       body {
         padding: 15px;
       }
@@ -131,6 +138,7 @@
       .mode-buttons button {
         font-size: 14px;
       }
+
     }
   </style>
 </head>
@@ -139,11 +147,17 @@
 
   <div class="container">
 
+    <!-- ヘッダー -->
     <div class="header">
+
       <img src="トータルロゴ.png" alt="Logo">
+
       <h1>URL変換ツール</h1>
+
     </div>
 
+
+    <!-- モード切り替え -->
     <div class="mode-buttons">
 
       <button
@@ -173,6 +187,8 @@
 
     </div>
 
+
+    <!-- 入力 -->
     <div class="tool-panel">
 
       <p>共有URLを入力してください：</p>
@@ -180,14 +196,16 @@
       <input
         type="text"
         id="mainInput"
-        placeholder="URLを入力してください">
+        placeholder="URLを入力してください"
+      >
 
       <p>追加する文字列：</p>
 
       <input
         type="text"
         id="appendText"
-        placeholder="追加する文字列を入力してください">
+        placeholder="追加する文字列を入力してください"
+      >
 
       <button
         class="convert-button"
@@ -197,8 +215,12 @@
 
     </div>
 
+
+    <!-- 結果 -->
     <div id="output"></div>
 
+
+    <!-- コピー・クリア -->
     <div class="button-row">
 
       <button onclick="copyUrl()">
@@ -219,195 +241,9 @@
     let currentMode = "drive";
 
 
-    /*
-     * =========================
-     * Google Drive
-     * =========================
-     *
-     * https://drive.google.com/file/d/FILE_ID/view
-     *
-     * ↓
-     *
-     * https://drive.google.com/uc?export=download&id=FILE_ID
-     */
-
-    function convertDrive() {
-
-      const input =
-        document.getElementById("mainInput").value.trim();
-
-      if (!input) {
-        document.getElementById("output").innerText =
-          "URLを入力してください。";
-        return;
-      }
-
-      const match =
-        input.match(
-          /drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/
-        );
-
-      if (!match) {
-        document.getElementById("output").innerText =
-          "正しいGoogle Drive URLではありません。";
-        return;
-      }
-
-      const fileId = match[1];
-
-      const result =
-        `https://drive.google.com/uc?export=download&id=${fileId}`;
-
-      document.getElementById("output").innerText =
-        result;
-    }
-
-
-    /*
-     * =========================
-     * Google スライド
-     * =========================
-     *
-     * 編集URL：
-     *
-     * https://docs.google.com/presentation/d/ID/edit?slide=id.xxx
-     *
-     * ↓
-     *
-     * 拡大表示URL：
-     *
-     * https://docs.google.com/presentation/d/ID/present?slide=id.xxx
-     */
-
-    function convertSlide() {
-
-      const input =
-        document.getElementById("mainInput").value.trim();
-
-      if (!input) {
-        document.getElementById("output").innerText =
-          "URLを入力してください。";
-        return;
-      }
-
-      const match =
-        input.match(
-          /docs\.google\.com\/presentation\/d\/([a-zA-Z0-9_-]+)/
-        );
-
-      if (!match) {
-        document.getElementById("output").innerText =
-          "❌ 正しいGoogleスライドURLではありません。";
-        return;
-      }
-
-      const presentationId = match[1];
-
-
-      /*
-       * slide= の値を取得
-       */
-      const slideMatch =
-        input.match(/[?&]slide=([^&#]+)/);
-
-
-      /*
-       * slide指定があればそのまま使用
-       * なければ id.p
-       */
-      const slide =
-        slideMatch
-          ? slideMatch[1]
-          : "id.p";
-
-
-      const result =
-        `https://docs.google.com/presentation/d/${presentationId}/present?slide=${slide}`;
-
-
-      document.getElementById("output").innerText =
-        result;
-    }
-
-
-    /*
-     * =========================
-     * Dropbox
-     * =========================
-     */
-
-    function convertDropbox() {
-
-      document.getElementById("output").innerText =
-        "Dropbox機能はまだ実装されていません。";
-    }
-
-
-    /*
-     * =========================
-     * URL末尾追加
-     * =========================
-     */
-
-    function convertAppend() {
-
-      const input =
-        document.getElementById("mainInput").value.trim();
-
-      const addition =
-        document.getElementById("appendText").value;
-
-
-      if (!input) {
-        document.getElementById("output").innerText =
-          "URLを入力してください。";
-        return;
-      }
-
-      if (!addition) {
-        document.getElementById("output").innerText =
-          "追加する文字列を入力してください。";
-        return;
-      }
-
-      document.getElementById("output").innerText =
-        input + addition;
-    }
-
-
-    /*
-     * =========================
-     * モード別処理
-     * =========================
-     */
-
-    function convertCurrentMode() {
-
-      if (currentMode === "drive") {
-
-        convertDrive();
-
-      } else if (currentMode === "slide") {
-
-        convertSlide();
-
-      } else if (currentMode === "dropbox") {
-
-        convertDropbox();
-
-      } else if (currentMode === "append") {
-
-        convertAppend();
-
-      }
-    }
-
-
-    /*
-     * =========================
-     * モード切り替え
-     * =========================
-     */
+    /* =========================================
+       モード切り替え
+       ========================================= */
 
     function switchMode(mode) {
 
@@ -429,48 +265,292 @@
         .getElementById("appendButton")
         .classList.remove("active");
 
-
       document
         .getElementById(mode + "Button")
         .classList.add("active");
-
 
       document.getElementById("output").innerText = "";
     }
 
 
-    /*
-     * =========================
-     * コピー
-     * =========================
-     */
+    /* =========================================
+       変換
+       ========================================= */
+
+    function convertCurrentMode() {
+
+      if (currentMode === "drive") {
+
+        convertDrive();
+
+        return;
+      }
+
+      if (currentMode === "slide") {
+
+        convertSlide();
+
+        return;
+      }
+
+      if (currentMode === "dropbox") {
+
+        convertDropbox();
+
+        return;
+      }
+
+      if (currentMode === "append") {
+
+        convertAppend();
+
+        return;
+      }
+    }
+
+
+    /* =========================================
+       Google Drive
+       ダウンロードURL
+       ========================================= */
+
+    function convertDrive() {
+
+      const input =
+        document
+          .getElementById("mainInput")
+          .value
+          .trim();
+
+      const output =
+        document.getElementById("output");
+
+
+      if (!input) {
+
+        output.innerText =
+          "URLを入力してください。";
+
+        return;
+      }
+
+
+      /*
+       * Google Drive URL
+       *
+       * https://drive.google.com/file/d/FILE_ID/view
+       */
+
+      const match =
+        input.match(
+          /drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/
+        );
+
+
+      if (!match) {
+
+        output.innerText =
+          "正しいGoogle Drive URLではありません。";
+
+        return;
+      }
+
+
+      const fileId =
+        match[1];
+
+
+      /*
+       * ダウンロードURL
+       */
+
+      const result =
+        "https://drive.google.com/uc?export=download&id=" +
+        fileId;
+
+
+      output.innerText =
+        result;
+    }
+
+
+    /* =========================================
+       Google スライド
+       拡大表示URL
+       ========================================= */
+
+    function convertSlide() {
+
+      const input =
+        document
+          .getElementById("mainInput")
+          .value
+          .trim();
+
+      const output =
+        document.getElementById("output");
+
+
+      if (!input) {
+
+        output.innerText =
+          "URLを入力してください。";
+
+        return;
+      }
+
+
+      /*
+       * Google スライドURLから
+       * プレゼンテーションIDを取得
+       */
+
+      const match =
+        input.match(
+          /docs\.google\.com\/presentation\/d\/([a-zA-Z0-9_-]+)/
+        );
+
+
+      if (!match) {
+
+        output.innerText =
+          "❌ 正しいGoogleスライドURLではありません。";
+
+        return;
+      }
+
+
+      const presentationId =
+        match[1];
+
+
+      /*
+       * slide= の値を取得
+       */
+
+      const slideMatch =
+        input.match(
+          /[?&]slide=([^&#]+)/
+        );
+
+
+      /*
+       * slide指定がない場合
+       */
+
+      const slide =
+        slideMatch
+          ? slideMatch[1]
+          : "id.p";
+
+
+      /*
+       * 拡大表示URL
+       */
+
+      const result =
+        "https://docs.google.com/presentation/d/" +
+        presentationId +
+        "/present?slide=" +
+        slide;
+
+
+      output.innerText =
+        result;
+    }
+
+
+    /* =========================================
+       Dropbox
+       ========================================= */
+
+    function convertDropbox() {
+
+      document.getElementById("output").innerText =
+        "Dropbox機能はまだ実装していません。";
+    }
+
+
+    /* =========================================
+       URL末尾追加
+       ========================================= */
+
+    function convertAppend() {
+
+      const input =
+        document
+          .getElementById("mainInput")
+          .value
+          .trim();
+
+      const addition =
+        document
+          .getElementById("appendText")
+          .value;
+
+
+      if (!input) {
+
+        document.getElementById("output").innerText =
+          "URLを入力してください。";
+
+        return;
+      }
+
+
+      if (!addition) {
+
+        document.getElementById("output").innerText =
+          "追加する文字列を入力してください。";
+
+        return;
+      }
+
+
+      document.getElementById("output").innerText =
+        input + addition;
+    }
+
+
+    /* =========================================
+       コピー
+       ========================================= */
 
     function copyUrl() {
 
       const text =
-        document.getElementById("output").innerText.trim();
+        document
+          .getElementById("output")
+          .innerText
+          .trim();
+
 
       if (!text) {
+
         alert("コピーするURLがありません。");
+
         return;
       }
 
+
       navigator.clipboard
         .writeText(text)
-        .then(() => {
+        .then(function() {
+
           alert("コピーしました！");
+
         })
-        .catch(() => {
+        .catch(function() {
+
           alert("コピーできませんでした。");
+
         });
     }
 
 
-    /*
-     * =========================
-     * クリア
-     * =========================
-     */
+    /* =========================================
+       クリア
+       ========================================= */
 
     function clearAll() {
 

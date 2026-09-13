@@ -25,7 +25,6 @@
       margin: 0 auto;
     }
 
-    /* ヘッダー */
     .header {
       display: flex;
       align-items: center;
@@ -42,10 +41,8 @@
     .header h1 {
       margin: 0;
       font-size: 28px;
-      text-align: left;
     }
 
-    /* 切り替えボタン */
     .mode-buttons {
       display: flex;
       gap: 10px;
@@ -67,7 +64,6 @@
       color: #ffffff;
     }
 
-    /* 入力エリア */
     .tool-panel {
       width: 100%;
     }
@@ -86,7 +82,6 @@
       margin-bottom: 10px;
     }
 
-    /* 変換ボタン */
     .convert-button {
       width: 100%;
       padding: 12px;
@@ -98,7 +93,6 @@
       cursor: pointer;
     }
 
-    /* 結果 */
     #output {
       width: 100%;
       min-height: 50px;
@@ -109,7 +103,6 @@
       word-break: break-all;
     }
 
-    /* 下ボタン */
     .button-row {
       display: flex;
       gap: 10px;
@@ -127,7 +120,6 @@
     }
 
     @media (max-width: 600px) {
-
       body {
         padding: 15px;
       }
@@ -139,7 +131,6 @@
       .mode-buttons button {
         font-size: 14px;
       }
-
     }
   </style>
 </head>
@@ -148,52 +139,40 @@
 
   <div class="container">
 
-    <!-- ヘッダー -->
     <div class="header">
-
       <img src="トータルロゴ.png" alt="Logo">
-
       <h1>URL変換ツール</h1>
-
     </div>
 
-
-    <!-- 切り替えボタン -->
     <div class="mode-buttons">
 
       <button
         id="driveButton"
         class="active"
-        onclick="switchMode('drive')"
-      >
+        onclick="switchMode('drive')">
         Google Drive
       </button>
 
       <button
         id="slideButton"
-        onclick="switchMode('slide')"
-      >
+        onclick="switchMode('slide')">
         Google スライド
       </button>
 
       <button
         id="dropboxButton"
-        onclick="switchMode('dropbox')"
-      >
+        onclick="switchMode('dropbox')">
         Dropbox
       </button>
 
       <button
         id="appendButton"
-        onclick="switchMode('append')"
-      >
+        onclick="switchMode('append')">
         URL末尾追加
       </button>
 
     </div>
 
-
-    <!-- 入力エリア -->
     <div class="tool-panel">
 
       <p>共有URLを入力してください：</p>
@@ -201,32 +180,25 @@
       <input
         type="text"
         id="mainInput"
-        placeholder="URLを入力してください"
-      >
+        placeholder="URLを入力してください">
 
       <p>追加する文字列：</p>
 
       <input
         type="text"
         id="appendText"
-        placeholder="追加する文字列を入力してください"
-      >
+        placeholder="追加する文字列を入力してください">
 
       <button
         class="convert-button"
-        onclick="convertCurrentMode()"
-      >
+        onclick="convertCurrentMode()">
         変換する
       </button>
 
     </div>
 
-
-    <!-- 結果 -->
     <div id="output"></div>
 
-
-    <!-- コピー・クリア -->
     <div class="button-row">
 
       <button onclick="copyUrl()">
@@ -244,137 +216,110 @@
 
   <script>
 
-    /* =========================
-       現在のモード
-       ========================= */
-
     let currentMode = "drive";
 
 
-    /* =========================
-       Google Drive
-       ========================= */
+    /*
+     * =========================
+     * Google Drive
+     * =========================
+     *
+     * https://drive.google.com/file/d/FILE_ID/view
+     *
+     * ↓
+     *
+     * https://drive.google.com/uc?export=download&id=FILE_ID
+     */
 
     function convertDrive() {
 
       const input =
         document.getElementById("mainInput").value.trim();
 
-      const addition =
-        document.getElementById("appendText").value.trim();
-
-
-      if (addition !== "") {
-
+      if (!input) {
         document.getElementById("output").innerText =
-          "Google Driveでは「追加する文字列」は使用できません。入力しないでください。";
-
+          "URLを入力してください。";
         return;
       }
-
-
-      /*
-       * Google DriveのURLだけを対象にする
-       *
-       * 入力：
-       * https://drive.google.com/file/d/FILE_ID/view
-       *
-       * 出力：
-       * https://drive.google.com/uc?export=download&id=FILE_ID
-       */
 
       const match =
         input.match(
-          /^https:\/\/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/
+          /drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/
         );
 
-
       if (!match) {
-
         document.getElementById("output").innerText =
           "正しいGoogle Drive URLではありません。";
-
         return;
       }
 
-
       const fileId = match[1];
-
 
       const result =
         `https://drive.google.com/uc?export=download&id=${fileId}`;
-
 
       document.getElementById("output").innerText =
         result;
     }
 
 
-    /* =========================
-       Google スライド
-       ========================= */
+    /*
+     * =========================
+     * Google スライド
+     * =========================
+     *
+     * 編集URL：
+     *
+     * https://docs.google.com/presentation/d/ID/edit?slide=id.xxx
+     *
+     * ↓
+     *
+     * 拡大表示URL：
+     *
+     * https://docs.google.com/presentation/d/ID/present?slide=id.xxx
+     */
 
     function convertSlide() {
 
       const input =
         document.getElementById("mainInput").value.trim();
 
-      const addition =
-        document.getElementById("appendText").value.trim();
-
-
-      if (addition !== "") {
-
+      if (!input) {
         document.getElementById("output").innerText =
-          "Google スライドでは「追加する文字列」は使用できません。入力しないでください。";
-
+          "URLを入力してください。";
         return;
       }
-
-
-      /*
-       * Google スライドのURLから
-       * プレゼンテーションIDを取得
-       */
 
       const match =
         input.match(
-          /^https:\/\/docs\.google\.com\/presentation\/d\/([a-zA-Z0-9_-]+)/
+          /docs\.google\.com\/presentation\/d\/([a-zA-Z0-9_-]+)/
         );
 
-
-      /*
-       * URL内の slide=id.xxxxx を取得
-       */
-
-      const slideMatch =
-        input.match(/(?:[?&])slide=([^&#]+)/);
-
-
       if (!match) {
-
         document.getElementById("output").innerText =
           "❌ 正しいGoogleスライドURLではありません。";
-
         return;
       }
-
 
       const presentationId = match[1];
 
 
       /*
-       * slide指定がある場合はそのIDを使用
-       * なければ id.p
+       * slide= の値を取得
        */
-
-      const slide =
-        slideMatch ? slideMatch[1] : "id.p";
+      const slideMatch =
+        input.match(/[?&]slide=([^&#]+)/);
 
 
       /*
-       * Google スライドの拡大表示URL
+       * slide指定があればそのまま使用
+       * なければ id.p
        */
+      const slide =
+        slideMatch
+          ? slideMatch[1]
+          : "id.p";
+
 
       const result =
         `https://docs.google.com/presentation/d/${presentationId}/present?slide=${slide}`;
@@ -385,9 +330,11 @@
     }
 
 
-    /* =========================
-       Dropbox
-       ========================= */
+    /*
+     * =========================
+     * Dropbox
+     * =========================
+     */
 
     function convertDropbox() {
 
@@ -396,20 +343,43 @@
     }
 
 
-    /* =========================
-       URL末尾追加
-       ========================= */
+    /*
+     * =========================
+     * URL末尾追加
+     * =========================
+     */
 
     function convertAppend() {
 
+      const input =
+        document.getElementById("mainInput").value.trim();
+
+      const addition =
+        document.getElementById("appendText").value;
+
+
+      if (!input) {
+        document.getElementById("output").innerText =
+          "URLを入力してください。";
+        return;
+      }
+
+      if (!addition) {
+        document.getElementById("output").innerText =
+          "追加する文字列を入力してください。";
+        return;
+      }
+
       document.getElementById("output").innerText =
-        "URL末尾追加機能はまだ実装されていません。";
+        input + addition;
     }
 
 
-    /* =========================
-       モードごとの変換
-       ========================= */
+    /*
+     * =========================
+     * モード別処理
+     * =========================
+     */
 
     function convertCurrentMode() {
 
@@ -430,18 +400,18 @@
         convertAppend();
 
       }
-
     }
 
 
-    /* =========================
-       モード切り替え
-       ========================= */
+    /*
+     * =========================
+     * モード切り替え
+     * =========================
+     */
 
     function switchMode(mode) {
 
       currentMode = mode;
-
 
       document
         .getElementById("driveButton")
@@ -465,51 +435,42 @@
         .classList.add("active");
 
 
-      /*
-       * モードを切り替えたら
-       * 前の変換結果だけ消す
-       */
-
       document.getElementById("output").innerText = "";
     }
 
 
-    /* =========================
-       コピー
-       ========================= */
+    /*
+     * =========================
+     * コピー
+     * =========================
+     */
 
     function copyUrl() {
 
       const text =
         document.getElementById("output").innerText.trim();
 
-
       if (!text) {
-
         alert("コピーするURLがありません。");
-
         return;
       }
-
 
       navigator.clipboard
         .writeText(text)
         .then(() => {
-
           alert("コピーしました！");
-
         })
         .catch(() => {
-
           alert("コピーできませんでした。");
-
         });
     }
 
 
-    /* =========================
-       クリア
-       ========================= */
+    /*
+     * =========================
+     * クリア
+     * =========================
+     */
 
     function clearAll() {
 

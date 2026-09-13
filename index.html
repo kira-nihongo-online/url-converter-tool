@@ -196,10 +196,10 @@
 
     </div>
 
-    <!-- Google Drive -->
-    <div id="drivePanel" class="tool-panel">
+    <!-- 入力エリア -->
+    <div class="tool-panel">
 
-      <p>共有URLを入力してください：</p>
+      <p id="inputLabel">共有URLを入力してください：</p>
 
       <input
         type="text"
@@ -207,49 +207,22 @@
         placeholder="Google Driveの共有URL"
       >
 
-      <button class="convert-button">
-        変換する
-      </button>
+      <div id="appendArea" class="hidden">
 
-    </div>
+        <p>追加する文字列：</p>
 
-    <!-- Google スライド -->
-    <div id="slidePanel" class="tool-panel hidden">
+        <input
+          type="text"
+          id="appendText"
+          placeholder="?download=1"
+        >
 
-      <p>編集URLを入力してください：</p>
-
-      <input
-        type="text"
-        id="slideInput"
-        placeholder="Google スライドの編集URL"
-      >
-
-      <button class="convert-button">
-        変換する
-      </button>
-
-    </div>
-
-    <!-- URL末尾追加 -->
-    <div id="appendPanel" class="tool-panel hidden">
-
-      <p>共有URLを入力してください：</p>
-      <input
-        type="text"
-        id="appendInput"
-        placeholder="追加したい元のURL"
-      >
-
-      <p>追加する文字列：</p>
-      <input
-        type="text"
-        id="appendText"
-        placeholder="?download=1"
-      >
+      </div>
 
       <button
         class="convert-button"
-        onclick="convertAppend()"
+        id="convertButton"
+        onclick="convertDrive()"
       >
         変換する
       </button>

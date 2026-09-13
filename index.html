@@ -324,13 +324,16 @@
 
          function convertCurrentMode() {
 
-           if (currentMode === "drive") {
+           const input =
+             document.getElementById("mainInput").value.trim();
 
-             convertDrive();
-
-           } else if (currentMode === "slide") {
+           if (input.includes("https://docs.google.com/presentation/d/")) {
 
              convertSlide();
+
+           } else if (currentMode === "drive") {
+
+             convertDrive();
 
            }
 

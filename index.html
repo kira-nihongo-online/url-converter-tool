@@ -45,7 +45,7 @@
       text-align: left;
     }
 
-    /* 切り替えボタン */
+    /* モードボタン */
     .mode-buttons {
       display: flex;
       gap: 10px;
@@ -126,18 +126,14 @@
       cursor: pointer;
     }
 
-    /* まだ使わないパネル */
-    .hidden {
-      display: none;
-    }
-
+    /* スマートフォン */
     @media (max-width: 600px) {
 
       body {
         padding: 15px;
       }
 
-      h1 {
+      .header h1 {
         font-size: 24px;
       }
 
@@ -162,7 +158,8 @@
 
     </div>
 
-    <!-- 切り替え -->
+
+    <!-- モード切り替え -->
     <div class="mode-buttons">
 
       <button
@@ -196,6 +193,7 @@
 
     </div>
 
+
     <!-- 入力エリア -->
     <div class="tool-panel">
 
@@ -217,7 +215,6 @@
 
       <button
         class="convert-button"
-        id="convertButton"
         onclick="convertCurrentMode()"
       >
         変換する
@@ -225,153 +222,322 @@
 
     </div>
 
+
     <!-- 結果 -->
     <div id="output"></div>
 
-        <!-- ボタン -->
-        <div class="button-row">
 
-          <button onclick="copyUrl()">
-            コピー
-          </button>
+    <!-- コピー・クリア -->
+    <div class="button-row">
 
-          <button onclick="clearAll()">
-            クリア
-          </button>
+      <button onclick="copyUrl()">
+        コピー
+      </button>
 
-        </div>
+      <button onclick="clearAll()">
+        クリア
+      </button>
 
-      </div>
-  
+    </div>
 
-       <script>
-
-         let currentMode = "drive";
-
-         function convertSlide() {
-
-           const input =
-             document.getElementById("mainInput").value.trim();
-
-           const addition =
-             document.getElementById("appendText").value;
-
-           if (addition.trim() !== "") {
-
-             document.getElementById("output").innerText =
-               "Google スライドでは「追加する文字列」は使用できません。入力しないでください。";
-
-             return;
-           }
-
-           const match =
-             input.match(/presentation\/d\/([a-zA-Z0-9_-]+)/);
-
-           if (match && match[1]) {
-
-             const id = match[1];
-
-             const result =
-               `https://docs.google.com/presentation/d/${id}/export/pdf`;
-
-             document.getElementById("output").innerText =
-               result;
-
-           } else {
-
-             document.getElementById("output").innerText =
-               "❌ 正しいGoogleスライドURLではありません。";
-           }
-         }
-
-         function convertDrive() {
-
-           const input =
-             document.getElementById("mainInput").value.trim();
-
-           const addition =
-             document.getElementById("appendText").value;
-
-           if (addition.trim() !== "") {
-
-             document.getElementById("output").innerText =
-               "Google Driveでは「追加する文字列」は使用できません。入力しないでください。";
-
-             return;
-           }
-
-           const match =
-             input.match(/\/d\/([a-zA-Z0-9_-]+)\//);
-
-           if (match && match[1]) {
-
-             const fileId = match[1];
-
-             const downloadUrl =
-               `https://drive.google.com/uc?export=download&id=${fileId}`;
-
-             document.getElementById("output").innerText =
-               downloadUrl;
-
-           } else {
-
-             document.getElementById("output").innerText =
-               "正しいURL形式ではありません。";
-           }
-         }
+  </div>
 
 
-         function convertCurrentMode() {
+  <script>
 
-           if (currentMode === "slide") {
+    /* =========================
+       現在のモード
+       ========================= */
 
-             convertSlide();
-
-           } else if (currentMode === "drive") {
-
-             convertDrive();
-
-           }
-
-         }
-
-         function switchMode(mode) {
-
-           currentMode = mode;
-
-           document.getElementById("driveButton").classList.remove("active");
-           document.getElementById("slideButton").classList.remove("active");
-           document.getElementById("dropboxButton").classList.remove("active");
-           document.getElementById("appendButton").classList.remove("active");
-
-           document.getElementById(mode + "Button").classList.add("active");
-
-         }
-
-         function copyUrl() {
-
-           const text =
-             document.getElementById("output").innerText;
-
-           if (!text) {
-             alert("コピーするURLがありません。");
-             return;
-           }
-
-           navigator.clipboard.writeText(text);
-
-         }
-
-         function clearAll() {
-
-           document.getElementById("mainInput").value = "";
-           document.getElementById("appendText").value = "";
-           document.getElementById("output").innerText = "";
-
-         }
+    let currentMode = "drive";
 
 
-      </script>
+    /* =========================
+       Google Drive
+       ========================= */
 
-    </body>
-    </html>
+    function convertDrive() {
+
+      const input =
+        document.getElementById("mainInput").value.trim();
+
+      const addition =
+        document.getElementById("appendText").value.trim();
+
+      if (addition !== "") {
+
+        document.getElementById("output").innerText =
+          "Google Driveでは「追加する文字列」は使用できません。入力しないでください。";
+
+        return;
+      }
+
+
+      /*
+       * Google Drive
+       * https://drive.google.com/file/d/FILE_ID/view
+       *
+       * ↓
+       *
+       * https://drive.google.com/uc?export=download&id=FILE_ID
+       */
+
+      const match =
+        input.match(
+          /https:\/\/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/
+        );
+
+
+      if (!match) {
+
+        document.getElementById("output").innerText =
+          "正しいGoogle Drive URLではありません。";
+
+        return;
+      }
+
+
+      const fileId = match[1];
+
+
+      const result =
+        `https://drive.google.com/uc?export=download&id=${fileId}`;
+
+
+      document.getElementById("output").innerText =
+        result;
+    }
+
+
+    /* =========================
+       Google スライド
+       ========================= */
+
+    function convertSlide() {
+
+      const input =
+        document.getElementById("mainInput").value.trim();
+
+      const addition =
+        document.getElementById("appendText").value.trim();
+
+
+      if (addition !== "") {
+
+        document.getElementById("output").innerText =
+          "Google スライドでは「追加する文字列」は使用できません。入力しないでください。";
+
+        return;
+      }
+
+
+      /*
+       * Google スライド
+       * https://docs.google.com/presentation/d/FILE_ID/edit
+       *
+       * ↓
+       *
+       * https://docs.google.com/presentation/d/FILE_ID/export/pdf
+       */
+
+      const match =
+        input.match(
+          /https:\/\/docs\.google\.com\/presentation\/d\/([a-zA-Z0-9_-]+)/
+        );
+
+
+      if (!match) {
+
+        document.getElementById("output").innerText =
+          "❌ 正しいGoogleスライドURLではありません。";
+
+        return;
+      }
+
+
+      const presentationId = match[1];
+
+
+      const result =
+        `https://docs.google.com/presentation/d/${presentationId}/export/pdf`;
+
+
+      document.getElementById("output").innerText =
+        result;
+    }
+
+
+    /* =========================
+       Dropbox
+       ========================= */
+
+    function convertDropbox() {
+
+      document.getElementById("output").innerText =
+        "Dropbox機能はまだ設定されていません。";
+    }
+
+
+    /* =========================
+       URL末尾追加
+       ========================= */
+
+    function convertAppend() {
+
+      const input =
+        document.getElementById("mainInput").value.trim();
+
+      const addition =
+        document.getElementById("appendText").value;
+
+
+      if (!input) {
+
+        document.getElementById("output").innerText =
+          "URLを入力してください。";
+
+        return;
+      }
+
+
+      if (!addition) {
+
+        document.getElementById("output").innerText =
+          "追加する文字列を入力してください。";
+
+        return;
+      }
+
+
+      const result =
+        input + addition;
+
+
+      document.getElementById("output").innerText =
+        result;
+    }
+
+
+    /* =========================
+       モードごとの変換
+       ========================= */
+
+    function convertCurrentMode() {
+
+      if (currentMode === "drive") {
+
+        convertDrive();
+
+      }
+
+      else if (currentMode === "slide") {
+
+        convertSlide();
+
+      }
+
+      else if (currentMode === "dropbox") {
+
+        convertDropbox();
+
+      }
+
+      else if (currentMode === "append") {
+
+        convertAppend();
+
+      }
+
+    }
+
+
+    /* =========================
+       モード切り替え
+       ========================= */
+
+    function switchMode(mode) {
+
+      currentMode = mode;
+
+
+      document
+        .getElementById("driveButton")
+        .classList.remove("active");
+
+      document
+        .getElementById("slideButton")
+        .classList.remove("active");
+
+      document
+        .getElementById("dropboxButton")
+        .classList.remove("active");
+
+      document
+        .getElementById("appendButton")
+        .classList.remove("active");
+
+
+      document
+        .getElementById(mode + "Button")
+        .classList.add("active");
+
+
+      /*
+       * モードを変えたら結果だけ消す。
+       * 入力内容は残す。
+       */
+
+      document.getElementById("output").innerText = "";
+    }
+
+
+    /* =========================
+       コピー
+       ========================= */
+
+    function copyUrl() {
+
+      const text =
+        document.getElementById("output").innerText.trim();
+
+
+      if (!text) {
+
+        alert("コピーするURLがありません。");
+
+        return;
+      }
+
+
+      navigator.clipboard
+        .writeText(text)
+        .then(() => {
+
+          alert("コピーしました！");
+
+        })
+        .catch(() => {
+
+          alert("コピーできませんでした。");
+
+        });
+    }
+
+
+    /* =========================
+       クリア
+       ========================= */
+
+    function clearAll() {
+
+      document.getElementById("mainInput").value = "";
+
+      document.getElementById("appendText").value = "";
+
+      document.getElementById("output").innerText = "";
+    }
+
+  </script>
+
+</body>
+</html>

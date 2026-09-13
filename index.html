@@ -433,34 +433,37 @@ function convertSlide() {
     document.getElementById("output");
 
   if (!input) {
-    output.innerText = "URLを入力してください。";
+    output.innerText =
+      "URLを入力してください。";
     return;
   }
 
   const match =
-    input.match(/presentation\/d\/([a-zA-Z0-9_-]+)/);
+    input.match(
+      /presentation\/d\/([a-zA-Z0-9_-]+)/
+    );
 
   const slideMatch =
-    input.match(/slide=([^&#]+)/);
+    input.match(
+      /slide=([^&#]+)/
+    );
 
-  if (match) {
-
-    const id = match[1];
-
-    const slide =
-      slideMatch ? slideMatch[1] : "id.p";
-
-    const result =
-      `https://docs.google.com/presentation/d/${id}/present?slide=${slide}`;
-
-    output.innerText =
-      result;
-
-  } else {
-
+  if (!match) {
     output.innerText =
       "❌ 正しいGoogleスライドURLではありません。";
+    return;
   }
+
+  const id = match[1];
+
+  const slide =
+    slideMatch ? slideMatch[1] : "id.p";
+
+  const result =
+    `https://docs.google.com/presentation/d/${id}/present?slide=${slide}`;
+
+  output.innerText =
+    result;
 }
 
 /* =========================================

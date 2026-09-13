@@ -246,221 +246,47 @@
         </div>
 
       </div>
+  
 
+       <script>
 
-      <script>
+         let currentMode = "drive";
 
-        /* =========================
-           モード切り替え
-        ========================= */
+         function switchMode(mode) {
 
-        function switchMode(mode) {
+           currentMode = mode;
 
-          document.getElementById("drivePanel").classList.add("hidden");
-          document.getElementById("slidePanel").classList.add("hidden");
-          document.getElementById("dropboxPanel").classList.add("hidden");
-          document.getElementById("appendPanel").classList.add("hidden");
+           document.getElementById("driveButton").classList.remove("active");
+           document.getElementById("slideButton").classList.remove("active");
+           document.getElementById("dropboxButton").classList.remove("active");
+           document.getElementById("appendButton").classList.remove("active");
 
-          document.getElementById("driveButton").classList.remove("active");
-          document.getElementById("slideButton").classList.remove("active");
-          document.getElementById("dropboxButton").classList.remove("active");
-          document.getElementById("appendButton").classList.remove("active");
+           document.getElementById(mode + "Button").classList.add("active");
 
-          document.getElementById(mode + "Panel").classList.remove("hidden");
-          document.getElementById(mode + "Button").classList.add("active");
+         }
 
-          document.getElementById("output").innerText = "";
-        }
+         function copyUrl() {
 
-        /* =========================
-           Google Drive
-        ========================= */
+           const text =
+             document.getElementById("output").innerText;
 
-        function convertDrive() {
+           if (!text) {
+             alert("コピーするURLがありません。");
+             return;
+           }
 
-          const input =
-            document.getElementById("driveInput").value.trim();
+           navigator.clipboard.writeText(text);
 
-          const match =
-            input.match(/\/d\/([a-zA-Z0-9_-]+)\//);
+         }
 
-          if (match && match[1]) {
+         function clearAll() {
 
-            const fileId = match[1];
+           document.getElementById("driveInput").value = "";
+           document.getElementById("appendText").value = "";
+           document.getElementById("output").innerText = "";
 
-            const downloadUrl =
-              `https://drive.google.com/uc?export=download&id=${fileId}`;
+         }
 
-            document.getElementById("output").innerText =
-              downloadUrl;
-
-          } else {
-
-            document.getElementById("output").innerText =
-              "正しいGoogle Drive URLではありません。";
-          }
-        }
-
-
-        /* =========================
-           Google スライド
-        ========================= */
-
-        function convertSlide() {
-
-          const input =
-            document.getElementById("slideInput").value.trim();
-
-          const match =
-            input.match(/presentation\/d\/([a-zA-Z0-9_-]+)/);
-
-          const slideMatch =
-            input.match(/slide=([^&#]+)/);
-
-          if (match) {
-
-            const id = match[1];
-
-            const slide =
-              slideMatch ? slideMatch[1] : "id.p";
-
-            const result =
-              `https://docs.google.com/presentation/d/${id}/present?slide=${slide}`;
-
-            document.getElementById("output").innerText =
-              result;
-
-          } else {
-
-            document.getElementById("output").innerText =
-              "正しいGoogleスライドURLではありません。";
-          }
-        }
-
-
-        /* =========================
-           Dropbox
-        ========================= */
-
-        function convertDropbox() {
-
-          const input =
-            document.getElementById("dropboxInput").value.trim();
-
-          if (!input) {
-
-            document.getElementById("output").innerText =
-              "DropboxのURLを入力してください。";
-
-            return;
-          }
-
-          let result;
-
-          if (input.includes("dl=")) {
-
-            result =
-              input.replace(/([?&]dl=)[^&]*/, "$11");
-
-          } else if (input.includes("?")) {
-
-            result =
-              input + "&dl=1";
-
-          } else {
-
-            result =
-              input + "?dl=1";
-          }
-
-          document.getElementById("output").innerText =
-            result;
-        }
-
-
-        /* =========================
-           URL末尾追加
-        ========================= */
-
-        function convertAppend() {
-
-          const url =
-            document.getElementById("appendInput").value.trim();
-
-          const addition =
-            document.getElementById("appendText").value;
-
-          if (!url) {
-
-            document.getElementById("output").innerText =
-              "元のURLを入力してください。";
-
-            return;
-          }
-
-          if (!addition) {
-
-            document.getElementById("output").innerText =
-              "追加する文字列を入力してください。";
-
-            return;
-          }
-
-          const result =
-            url + addition;
-
-          document.getElementById("output").innerText =
-            result;
-        }
-
-
-        /* =========================
-           コピー
-        ========================= */
-
-        function copyUrl() {
-
-          const text =
-            document.getElementById("output").innerText;
-
-          if (!text) {
-
-            alert("コピーするURLがありません。");
-
-            return;
-          }
-
-          const textarea =
-            document.createElement("textarea");
-
-          textarea.value = text;
-
-          document.body.appendChild(textarea);
-
-          textarea.select();
-
-          document.execCommand("copy");
-
-          document.body.removeChild(textarea);
-
-          alert("コピーしました！");
-        }
-
-
-        /* =========================
-           クリア
-        ========================= */
-
-        function clearAll() {
-
-          document.getElementById("driveInput").value = "";
-          document.getElementById("slideInput").value = "";
-          document.getElementById("dropboxInput").value = "";
-          document.getElementById("appendInput").value = "";
-          document.getElementById("appendText").value = "";
-
-          document.getElementById("output").innerText = "";
-        }
 
       </script>
 

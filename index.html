@@ -472,8 +472,25 @@ function convertSlide() {
 
 function convertDropbox() {
 
-  document.getElementById("output").innerText =
-    "Dropbox機能はまだ実装されていません。";
+  const input =
+    document.getElementById("mainInput").value.trim();
+
+  const output =
+    document.getElementById("output");
+
+  if (!input) {
+    output.innerText =
+      "URLを入力してください。";
+    return;
+  }
+
+  const result =
+    input.replace(/[?&]dl=0(?:&|$)/, function(match) {
+      return match.startsWith("?") ? "?dl=1" : "&dl=1";
+    });
+
+  output.innerText =
+    result;
 }
 
 

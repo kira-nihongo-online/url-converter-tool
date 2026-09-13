@@ -45,7 +45,7 @@
       text-align: left;
     }
 
-    /* 切り替えボタン */
+    /* モード切り替え */
     .mode-buttons {
       display: flex;
       gap: 10px;
@@ -67,7 +67,7 @@
       color: #ffffff;
     }
 
-    /* 入力エリア */
+    /* 入力 */
     .tool-panel {
       width: 100%;
     }
@@ -109,7 +109,7 @@
       word-break: break-all;
     }
 
-    /* 下ボタン */
+    /* コピー・クリア */
     .button-row {
       display: flex;
       gap: 10px;
@@ -277,14 +277,11 @@
         .getElementById(mode + "Button")
         .classList.add("active");
 
-      document
-        .getElementById("output")
-        .innerText = "";
     }
 
 
     /* ========================================
-       現在のモードで変換
+       モードごとの変換
        ======================================== */
 
     function convertCurrentMode() {
@@ -296,12 +293,14 @@
         return;
       }
 
+
       if (currentMode === "slide") {
 
         convertSlide();
 
         return;
       }
+
 
       if (currentMode === "dropbox") {
 
@@ -310,12 +309,14 @@
         return;
       }
 
+
       if (currentMode === "append") {
 
         convertAppend();
 
         return;
       }
+
     }
 
 
@@ -336,6 +337,7 @@
           .getElementById("mainInput")
           .value
           .trim();
+
 
       const output =
         document.getElementById("output");
@@ -375,6 +377,7 @@
 
       output.innerText =
         result;
+
     }
 
 
@@ -382,14 +385,10 @@
        Google スライド
        
        入力：
-       https://docs.google.com/presentation/d/ID/edit
-       
-       または
-       
        https://docs.google.com/presentation/d/ID/edit?slide=id.xxx
        
        出力：
-       https://docs.google.com/presentation/d/ID/export/pdf
+       https://docs.google.com/presentation/d/ID/present?slide=id.xxx
        ======================================== */
 
     function convertSlide() {
@@ -399,6 +398,7 @@
           .getElementById("mainInput")
           .value
           .trim();
+
 
       const output =
         document.getElementById("output");
@@ -413,9 +413,13 @@
       }
 
 
+      /*
+       * プレゼンテーションIDを取得
+       */
+
       const match =
         input.match(
-          /docs\.google\.com\/presentation\/d\/([a-zA-Z0-9_-]+)/
+          /presentation\/d\/([a-zA-Z0-9_-]+)/
         );
 
 
@@ -433,19 +437,39 @@
 
 
       /*
-       * 編集URLの /edit や
-       * ?slide=id.xxx は使わない。
+       * slide= の値を取得
+       */
+
+      const slideMatch =
+        input.match(
+          /[?&]slide=([^&#]+)/
+        );
+
+
+      /*
+       * slide指定がある場合
+       */
+
+      const slide =
+        slideMatch
+          ? slideMatch[1]
+          : "id.p";
+
+
+      /*
+       * 拡大表示URL
        *
-       * プレゼンテーションIDだけを使って
-       * PDFダウンロードURLを作る。
+       * ここは /present
+       * PDFにはしない
        */
 
       const result =
-        `https://docs.google.com/presentation/d/${presentationId}/export/pdf`;
+        `https://docs.google.com/presentation/d/${presentationId}/present?slide=${slide}`;
 
 
       output.innerText =
         result;
+
     }
 
 
@@ -459,6 +483,7 @@
         .getElementById("output")
         .innerText =
         "Dropbox機能はまだ実装されていません。";
+
     }
 
 
@@ -474,17 +499,20 @@
           .value
           .trim();
 
+
       const addition =
         document
           .getElementById("appendText")
           .value;
 
 
+      const output =
+        document.getElementById("output");
+
+
       if (!input) {
 
-        document
-          .getElementById("output")
-          .innerText =
+        output.innerText =
           "URLを入力してください。";
 
         return;
@@ -493,19 +521,16 @@
 
       if (!addition) {
 
-        document
-          .getElementById("output")
-          .innerText =
+        output.innerText =
           "追加する文字列を入力してください。";
 
         return;
       }
 
 
-      document
-        .getElementById("output")
-        .innerText =
+      output.innerText =
         input + addition;
+
     }
 
 
@@ -542,6 +567,7 @@
           alert("コピーできませんでした。");
 
         });
+
     }
 
 
@@ -562,6 +588,7 @@
       document
         .getElementById("output")
         .innerText = "";
+
     }
 
   </script>
